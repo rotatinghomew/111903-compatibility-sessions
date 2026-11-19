@@ -1,0 +1,111 @@
+{
+  "windows": [
+    {
+      "id": "W1",
+      "start": "2026-08-09T12:00:00+08:00",
+      "end": "2026-08-09T14:00:00+08:00",
+      "crew": "A"
+    },
+    {
+      "id": "W2",
+      "start": "2026-08-10T10:00:00+08:00",
+      "end": "2026-08-10T11:00:00+08:00",
+      "crew": "B"
+    }
+  ],
+  "equipment": [
+    {
+      "id": "LOAN-1",
+      "kind": "loaner_bell",
+      "possible_windows": [
+        "W1",
+        "W2"
+      ],
+      "depot": "湾东",
+      "minimum_transport_minutes": 30
+    }
+  ],
+  "equipment_bookings": [
+    {
+      "reservation": "D13",
+      "equipment": "LOAN-1",
+      "from_window": "W2",
+      "earliest_release": "2026-08-10T11:30:00+08:00"
+    }
+  ],
+  "work_log": [
+    {
+      "dispatch": "D11",
+      "started": "2026-08-09T12:10:00+08:00",
+      "ended": "2026-08-09T12:30:00+08:00"
+    }
+  ],
+  "allowed_reversible_transitions": [
+    {
+      "start": "S1",
+      "end": "S0",
+      "minutes": 25,
+      "household": "H11",
+      "last_window": "W1"
+    }
+  ],
+  "additional_trials": [
+    {
+      "id": "C-S0-a",
+      "installation": "J-S0-a",
+      "state": "S0",
+      "topology": "legacy_router",
+      "function": "ring",
+      "pair": "pass",
+      "reconnect": "pass"
+    },
+    {
+      "id": "C-S0-b",
+      "installation": "J-S0-b",
+      "state": "S0",
+      "topology": "legacy_router",
+      "function": "ring",
+      "pair": "pass",
+      "reconnect": "pass"
+    },
+    {
+      "id": "C-S2-a",
+      "installation": "J-S2-a",
+      "state": "S2",
+      "topology": "legacy_router",
+      "function": "ring",
+      "pair": "pass",
+      "reconnect": "pass"
+    },
+    {
+      "id": "C-S2-b",
+      "installation": "J-S2-b",
+      "state": "S2",
+      "topology": "legacy_router",
+      "function": "ring",
+      "pair": "pass",
+      "reconnect": "pass"
+    }
+  ],
+  "sold_bundles": [
+    {
+      "id": "SB11",
+      "household": "H11",
+      "contracted_at": "2026-08-08T10:00:00+08:00",
+      "mandatory": [
+        "ring"
+      ],
+      "planned": [
+        "S0",
+        "S1",
+        "S3"
+      ],
+      "cited_trials": [
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ]
+    }
+  ]
+}

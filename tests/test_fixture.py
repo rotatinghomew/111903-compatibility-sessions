@@ -30,5 +30,20 @@ class FixtureTest(unittest.TestCase):
         for record in export["corrections"]:
             self.assertIn(record["trial"], trials)
 
+    def test_partner_calendar_links_sold_bundles_and_equipment(self):
+        root = Path(__file__).parents[1] / 'data'
+        service = json.loads((root / 'maintenance_windows.json').read_text(encoding='utf-8'))
+        partner = json.loads((root / 'partner_calendar.json').read_text(encoding='utf-8'))
+        reserve, = partner['equipment_bookings']
+        slots = {row['id']: row for row in partner['windows']}
+        self.assertEqual(set(slots), set(service['windows']))
+        self.assertEqual(reserve['equipment'], partner['equipment'][0]['id'])
+        self.assertGreater(reserve['earliest_release'], slots[reserve['from_window']]['end'])
+        self.assertTrue(any(row['id'] == reserve['reservation'] for row in service['dispatches']))
+        bundle, = partner['sold_bundles']
+        correction, = service['corrections']
+        self.assertIn(correction['trial'], bundle['cited_trials'])
+        self.assertLess(bundle['contracted_at'], correction['known_at'])
+
 if __name__ == "__main__":
     unittest.main()
