@@ -45,5 +45,27 @@ class FixtureTest(unittest.TestCase):
         self.assertIn(correction['trial'], bundle['cited_trials'])
         self.assertLess(bundle['contracted_at'], correction['known_at'])
 
+    def test_gateway_census_and_receipts_share_physical_asset_ids(self):
+        path = Path(__file__).parents[1] / 'data' / 'shared_gateway.json'
+        site = json.loads(path.read_text(encoding='utf-8'))
+        homes = {row['id'] for row in site['homes']}
+        gateways = {row['id'] for row in site['gateways']}
+        operations = {row['id']: row for row in site['operations']}
+        windows = {row['id']: row for row in site['windows']}
+        orders = {row['id']: row for row in site['work_orders']}
+        for row in site['inventory_notices'] + site['initial_connections']:
+            self.assertIn(row['home'], homes)
+            self.assertIn(row['gateway'], gateways)
+        for row in site['permissions']:
+            self.assertLessEqual(set(row['windows']), windows.keys())
+            self.assertLessEqual(set(row['operations']), {op['kind'] for op in operations.values()})
+        for receipt in site['receipts']:
+            order = orders[receipt['work_order']]
+            window = windows[order['window']]
+            self.assertLessEqual(window['start'], order['started'])
+            self.assertLess(order['started'], receipt['known_at'])
+            self.assertIn(receipt['gateway'], gateways)
+            self.assertEqual(operations[order['operation']]['kind'], 'move_home')
+
 if __name__ == "__main__":
     unittest.main()
