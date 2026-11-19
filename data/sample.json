@@ -1,0 +1,52 @@
+{
+  "models": [
+    {
+      "device": "D1",
+      "hub": "H1"
+    },
+    {
+      "device": "D2",
+      "hub": "H1"
+    }
+  ],
+  "firmware": [
+    {
+      "id": "F1",
+      "device": "D1",
+      "version": "1.4"
+    },
+    {
+      "id": "F2",
+      "device": "D1",
+      "version": "2.0"
+    },
+    {
+      "id": "H3",
+      "device": "H1",
+      "version": "4.1"
+    }
+  ],
+  "trials": [
+    {
+      "installation": "I1",
+      "topology": "mixed",
+      "firmware": "1.4+4.1",
+      "stage": "reconnect",
+      "result": "fail"
+    },
+    {
+      "installation": "I2",
+      "topology": "single",
+      "firmware": "2.0+4.1",
+      "stage": "pair",
+      "result": "pass"
+    }
+  ],
+  "commitments": [
+    {
+      "bundle": "B1",
+      "firmware": "1.4",
+      "status": "sold"
+    }
+  ]
+}
