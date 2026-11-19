@@ -1,0 +1,44 @@
+{
+  "clock": "Asia/Shanghai",
+  "states": {
+    "S0": {"hub": "1", "bell": "1", "sensor": "1"},
+    "S1": {"hub": "2", "bell": "1", "sensor": "1"},
+    "S2": {"hub": "1", "bell": "2", "sensor": "1"},
+    "SB": {"hub": "2", "bell": "loaner", "sensor": "1"},
+    "S3": {"hub": "2", "bell": "2", "sensor": "1"}
+  },
+  "changes": [
+    {"from": "S0", "to": "S1", "minutes": 20, "equipment": null},
+    {"from": "S0", "to": "S2", "minutes": 20, "equipment": null},
+    {"from": "S2", "to": "S3", "minutes": 30, "equipment": null},
+    {"from": "S1", "to": "S3", "minutes": 30, "equipment": null},
+    {"from": "S1", "to": "SB", "minutes": 15, "equipment": "loaner_bell"},
+    {"from": "S0", "to": "SB", "minutes": 35, "equipment": "loaner_bell"},
+    {"from": "SB", "to": "S3", "minutes": 30, "equipment": null},
+    {"from": "S2", "to": "S0", "minutes": 15, "equipment": null}
+  ],
+  "protocol": {"ring": {"stages": ["pair", "reconnect"], "min_complete_installations": 2}, "local_alert": {"stages": ["reconnect"], "min_complete_installations": 2}},
+  "households": [
+    {"id": "H11", "topology": "legacy_router", "start": "S0", "goal": "S3", "continuous": ["ring"], "maintenance_only_outage": ["local_alert"], "windows": ["W1", "W2"], "priority": 1},
+    {"id": "H12", "topology": "new_router", "start": "S0", "goal": "S3", "continuous": ["ring", "local_alert"], "maintenance_only_outage": [], "windows": ["W1"], "priority": 2},
+    {"id": "H13", "topology": "legacy_router", "start": "S0", "goal": "S3", "continuous": ["ring"], "maintenance_only_outage": [], "windows": ["W2"], "priority": 1}
+  ],
+  "windows": {"W1": {"minutes": 90, "crew": 1, "loaner_bell": 1}, "W2": {"minutes": 60, "crew": 1, "loaner_bell": 1}},
+  "trials": [
+    {"id": "T1", "installation": "I1", "state": "S1", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T2", "installation": "I2", "state": "S1", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T3", "installation": "I3", "state": "S3", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T4", "installation": "I4", "state": "S3", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T5", "installation": "I5", "state": "SB", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T6", "installation": "I6", "state": "SB", "topology": "legacy_router", "function": "ring", "pair": "pass", "reconnect": "pass"},
+    {"id": "T7", "installation": "I7", "state": "S2", "topology": "new_router", "function": "ring", "pair": "pass", "reconnect": null},
+    {"id": "T8", "installation": "I3", "state": "S3", "topology": "legacy_router", "function": "local_alert", "reconnect": "pass"},
+    {"id": "T9", "installation": "I4", "state": "S3", "topology": "legacy_router", "function": "local_alert", "reconnect": "pass"}
+  ],
+  "dispatches": [
+    {"id": "D11", "household": "H11", "window": "W1", "from": "S0", "to": "S1", "status": "executed", "minutes_used": 20},
+    {"id": "D13", "household": "H13", "window": "W2", "from": "S0", "to": "SB", "status": "reserved", "equipment": "loaner_bell"}
+  ],
+  "corrections": [{"id": "C1", "trial": "T2", "known_at": "2026-08-09T13:00:00+08:00", "changed_fields": {"topology": "new_router"}}],
+  "retrial_slots": [{"id": "Q1", "state": "S1", "topology": "legacy_router", "functions": ["ring", "local_alert"], "window": "W2"}]
+}
