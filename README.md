@@ -6,6 +6,17 @@
 
 无需安装第三方依赖。设置 `PYTHONPATH=src` 后运行 `python3 -m compatibility-sessions` 可查看工作区版本。运行现有基线检查：`PYTHONPATH=src python3 -m unittest discover -s tests -v`。
 
+## 分析命令
+
+所有命令只读本地记录，不控制真实设备；`--data` 指定资料目录（默认 `data/`），`--json` 输出机器可读结果。
+
+- `python3 -m compatibility-sessions report`：完整放量建议（家庭批次 + 共享站点 + 已售套装）。
+- `python3 -m compatibility-sessions households`：家庭批次分析——按服务优先级分配窗口工时与替换件，给出每户的前进路径、安全退回或保留原组合的结论，并区分某个中间阶段缺证、当前已无可行转换、有路径但伙伴容量不足。
+- `python3 -m compatibility-sessions site`：共享网关站点视图——按整个共享域判断连续可用，列出连接现状、端口占用、各户当前承诺、候选操作的许可/证据/容量阻塞、复验与许可补齐分别改变哪条路径。
+- `python3 -m compatibility-sessions bundle <编号>`：已售套装客服视图——当时的承诺、已执行步骤、现在仍可兑现的安排、何时改走人工支持（如 `SB11`，站点套装如 `PB43`）。
+
+分析口径：已执行的步骤是家庭真实现状；已预留未开始的安排只占显式释放才回到公用池；同一安装反复登记只算一次独立观测；更正不重写原始交付记录，只在分析视图里另发新的支持范围；证据不跨拓扑、配套、临时状态或接入数量继承。
+
 ## 资料
 
 `data/sample.json` 保存小型合成记录，顶层键分别为 models, firmware, trials, commitments。
